@@ -1,4 +1,4 @@
-def bisec(mi: int, ma: int, func: 'function', acc: float) -> list:
+def bisec(mi: int, ma: int, func, acc: float) -> list:
     minVal = func(mi)
     if minVal >= acc or mi == ma:
         return (mi, minVal)
