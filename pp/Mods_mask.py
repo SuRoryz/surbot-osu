@@ -1,6 +1,6 @@
 import math
 
-def applyMods(bm: 'BeatmapDict', mods='nomod') -> list:
+def applyMods(bm: dict, mods='nomod') -> list:
 
     od = float(bm['diff_overall'])
     ar = float(bm['diff_approach'])
