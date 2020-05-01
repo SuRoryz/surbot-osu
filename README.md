@@ -11,10 +11,14 @@
   
   When you wrote /np you can use .pp:
   
-  ![alt text]("/blob/without_args.png?raw=true")
+  ![](blob/no_args.png?raw=true)
   
-  You can use keyword and non-keyword arguments.
-  <i>You can use only 1 value for miss or acc. 95, 100 and 0, 0 means that your parametr adds to those</i>
+  You can use keyword and non-keyword arguments
+  <strong><i>You can use only 1 value for miss or acc. 95, 100 and 0, 0 means that your parametr adds to those</i></strong>
+  
+  It's possible to combine keyword args and non-keyword args. Just use keyword args after right-ordered non-keyword args:
+  
+  ![](blob/args.png?raw=true)
   </li>
   
   <li>.info - displays information about commands.
