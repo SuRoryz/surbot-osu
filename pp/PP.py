@@ -12,7 +12,7 @@ https://github.com/ppy/osu-performance/blob/a7e98ebea5bcb51c7f3463d8cc45ab15256f
 Not direct because of idk. Will rewrite to easy comparable with original code soon
 '''
 
-def PPCalc(hits: list, combo: int, score_v: int, bm: 'BeatmapDict', mods: list='nomod', f_acc: float=None, f_miss: float=None) -> float:
+def PPCalc(hits: list, combo: int, score_v: int, bm: dict, mods: list='nomod', f_acc: float=None, f_miss: float=None) -> float:
     if f_acc != None:
         if f_miss == None:
             hits = accDist(int(bm['count_normal']) + int(bm['count_slider']) + int(bm['count_spinner']),  0, f_acc)
