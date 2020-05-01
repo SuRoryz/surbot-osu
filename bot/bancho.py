@@ -69,7 +69,7 @@ class Sur:
     # Starts main loop
     def run(self) -> None:
 
-        loop: asynco.new_event_loop = asyncio.new_event_loop()
+        loop: asyncio.new_event_loop = asyncio.new_event_loop()
         loop.run_until_complete(self.start())
 
     # Main loop
