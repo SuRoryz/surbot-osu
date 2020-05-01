@@ -13,8 +13,8 @@
   
   ![](blob/no_args.png?raw=true)
   
-  You can use keyword and non-keyword arguments
-  <strong><i>You can use only 1 value for miss or acc. 95, 100 and 0, 0 means that your parametr adds to those</i></strong>
+  You can use keyword and non-keyword arguments.
+  <strong><i>You can use only 1 value for miss or acc. 95, 100 and 0, 0 means that your parameter adds to those</i></strong>
   
   It's possible to combine keyword args and non-keyword args. Just use keyword args after right-ordered non-keyword args:
   
