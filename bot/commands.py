@@ -1,6 +1,6 @@
 import PP_Calculator
 
-from util import str_to_dict
+from util import str_to_dict, mod_convert
 from json import loads
 from re import findall
 
@@ -36,10 +36,9 @@ def calc(*args) -> str:
     args: list = args[0]
     beatmap_ID: str = findall(r'\d+', Action[Action.find('/b/')+3:])[0]
 
+    # If +MOD_NAME in Action, collect them to mods parameter
     if '+' in Action:
-        mods = Action[Action.index('+')+1:]
-        mods = [i.lower() for i in [mods[i:i+2] for i in range(0, len(mods), 2)]]
-
+        mods = mod_convert(Action)
     else:
         mods = 'nomod'
 

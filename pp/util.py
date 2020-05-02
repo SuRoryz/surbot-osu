@@ -22,3 +22,23 @@ def bisec(mi: int, ma: int, func, acc: float) -> list:
 
 def str_to_dict(**kwargs) -> dict:
     return kwargs
+
+def mod_convert(mods: string):
+    mod_list = {
+        'hardrock': 'hr',
+        'doubletime': 'dt',
+        'hidden': 'hd',
+        'easy': 'ez',
+        'flashlight': 'fl',
+        'halftime': 'ht'
+        }
+
+    res = list()
+    mods = mods[mods.index'+')+1:].strip('+').split()
+    for i in mods:
+        try:
+            res.append(mod_list[i.lower()])
+        except:
+            continue
+
+    return res
