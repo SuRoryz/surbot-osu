@@ -248,7 +248,7 @@ def calcPred(*args) -> str:
     Pred.predict(nick, float(res[0][3]))
 
     if Pred.predicted == 'Impossible':
-        PP_Pred = 'Impossible for you :('
+        PP_Pred = 'Impossible to FC for you :('
     else:
         PP_Pred: float = "Future you {}pp".format(PP_Calculator.PP_Calculator('max',
                                               beatmap_ID,
