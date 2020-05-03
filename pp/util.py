@@ -14,7 +14,7 @@ def getBeatmap(key, id_, mods='nomod'):
     params = {'k': key,
 	      'b': id_}
 
-    if mods != 'nomod':
+    if mods != 'nomod' and type(mods) != int:
         appble_mods = []
         [((appble_mods.append(i)) if i in ['dt', 'ht', 'hr', 'ez'] else '') for i in mods]
         params['mods'] = 0
@@ -22,7 +22,28 @@ def getBeatmap(key, id_, mods='nomod'):
         for i in appble_mods:
             params['mods'] += mods_dict[i]
 
-    return requests.get(url, params).text
+    if type(mods) == int:
+        mods = bit_analys(mods)
+        for i in mods:
+            if i not in [2, 16, 64, 256, 512]:
+                mods.remove(i)
+        params['mods'] = mods
+
+    c = requests.get(url, params).text   
+
+    return c
+
+def bit_analys(x):
+    binary = bin(x)
+    iterable = list(str(binary)[2:])
+    iterable.reverse()
+    lenght = len(iterable)
+    res = list()
+    for i in range(lenght):
+        if int(iterable[i]) == 1:
+            res.append(2**i)
+    return res
+        
 
 def mod_convert(mods: str):
     mod_list = {
