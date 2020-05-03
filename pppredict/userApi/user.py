@@ -51,5 +51,5 @@ class User:
     def calcAvgStar(self) -> None:
         bm_stars: list = list()
         for score in self.scores:
-            bm_stars.append(float(loads(getBeatmap(self.KEY, score['beatmap_id']))[0]['difficultyrating']))
+            bm_stars.append(float(loads(getBeatmap(self.KEY, score['beatmap_id'], int(score['enabled_mods'])))[0]['difficultyrating']))
             self.star_avg = sum(bm_stars)/10

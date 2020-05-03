@@ -26,7 +26,11 @@ class Prediction:
         acc_range: float = self.user.acc * (1 - self.user.acc/100)
         max_ = min(100, self.user.acc + (acc_range*1.625))
         min_ = abs(self.user.acc - (acc_range*1.625))
+
+        print(self.user.star_avg)
+
+        if self.stars - self.user.star_avg > 1.5:
+            self.predicted = "Impossible"
+            return
         #Calc acc
         self.predicted = max(min_, min(max_, self.user.acc + (self.user.star_avg-self.stars) * (8*acc_range/self.user.star_avg)))
-        if self.predicted == min_:
-            self.predicted = "Impossible"
