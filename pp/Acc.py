@@ -1,4 +1,4 @@
-from util import bisec
+from util import black_magic
 
 # Acc calculation
 def accCalc(hits: list) -> float:
@@ -14,25 +14,17 @@ def accCalc(hits: list) -> float:
 # Hits calculation
 def accDist(objs: int, misses: int, acc: float) -> list:
     best300s = getBest300s(objs, misses, acc)
-    best100s = int(getBest100s(objs, best300s, misses, acc)[0])
+    best100s = int(getBest100s(objs, misses, acc))
 
     return best300s, best100s, objs - best300s - best100s - misses, misses
 
 # Calculate 300s
 def getBest300s(objs: int, misses: int, acc: float) -> int:
-    best300s: int = 0
-    best: int = getBest100s(objs, 0, misses, acc)
-
-    for i in range(1, (objs - misses)+1):
-        val = getBest100s(objs, i, misses, acc)
-
-        if abs(val[1] - acc) < abs(best[1] - acc):
-            best = val
-            best300s = i
+    best300s: int = objs - getBest100s(objs, misses, acc) - misses
 
     return best300s
 
 # Calculate 100s
-def getBest100s(objs: int, h300: int, misses: int, acc: float) -> int:
-    return bisec(0, objs-h300 - misses, lambda x: accCalc([h300, x, objs - h300 - x - misses, misses]), acc*100)
+def getBest100s(objs: int, misses: int, acc: float) -> int:
+    return black_magic(objs, acc, misses)
 
