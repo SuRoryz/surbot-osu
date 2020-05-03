@@ -19,8 +19,11 @@
   It's possible to combine keyword args and non-keyword args. Just use keyword args after right-ordered non-keyword args:
   
   ![](blob/args.png?raw=true)
-  </li>
   
+  </li>
+  <li>.pp_pred [mods=nomod, acc=95, 100, miss=0, 0, combo=max] - actually same as .pp but with predicted pps based on player's scores
+ </li>
+ 
   <li>.info - displays information about commands.
   </li>
   </ul>
