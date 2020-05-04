@@ -59,6 +59,8 @@ body:before {
     border: 2px solid #e3609a;
     width: 40%;
     margin-top: 5%;
+    position: absolute;
+    bottom: 20%;
 }
 .urls {
     display: flex;
