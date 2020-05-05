@@ -1,0 +1,78 @@
+---
+permalink: /info
+---
+
+<html>
+<head>
+    <link rel="stylesheet" href="st.css">
+    <link href="font/ubuntu.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main">
+        <div class="title">
+            <h1>INFO PAGE</h1>
+        </div>
+        <div class="infobox">
+            <div class="command">
+                <div class="syntax">
+                    <h1>.pp</h1>
+                    <h3>Syntax</h3>
+                    <p>.pp <span class="args">[mods=nomod acc=95, 100 miss=0 combo=max]</span></p>
+                    <h3>Usage</h3>
+                    <p><i class="dark">When you used /np once, you can use .pp in any time</i><br/>
+                    You can use .pp without any parameters:<br/>
+                        <i class="example">.pp  </i> <span class="dark">// Will show pp for map with nomod & 95, 100 acc & max combo</span> <br/>
+                    Also you can use keyword parameters:<br/>
+                        <i class="example">.pp mods=hrhd combo=1337 acc=69 </i><span class="dark">// Will show pp for map with hrhd & 69, 95, 100 acc & 1337 combo</span> <br/>
+                    And with non-keyword parameters: <span class="dark">// non-kword params must be in right order</span><br/>
+                        <i class="example">.pp hddt 85</i> <span class="dark">// Will show pp for map with hddt & 85, 95, 100 acc & max combo</span> <br/>
+                    Actually, you can use both types of parameters!<span class="dark">// Kword params should be after non-kword one</span> <br/>
+                        <i class="example">.pp hddt combo=1337</i> <span class="dark">// Will show pp for map with hddt & 95, 100 acc & 1337 combo</span> <br/>
+                    </p>
+                </div>
+                <div class="info">
+                    <p>Displays pp for map in /np</p>
+                </div>
+            </div>
+            <hr/>
+            <div class="command">
+                <div class="syntax">
+                    <h1>.pp_pred</h1>
+                    <h3>Syntax</h3>
+                    <p>.pp_pred <span class="args">[mods=nomod acc=95, 100 miss=0 combo=max]</span></p>
+                    <h3>Usage</h3>
+                    <p><i class="dark">When you used /np once, you can use .pp_pred in any time</i><br/>
+                        You can use .pp_pred without any parameters:<br/>
+                        <i class="example">.pp_pred  </i> <span class="dark">// Will show pp for map with nomod & 95, 100 acc & max combo</span> <br/>
+                        Also you can use keyword parameters:<br/>
+                        <i class="example">.pp_pred mods=hrhd combo=1337 acc=69 </i><span class="dark">// Will show pp for map with hrhd & 69, 95, 100 acc & 1337 combo</span> <br/>
+                        And with non-keyword parameters: <span class="dark">// non-kword params must be in right order</span><br/>
+                        <i class="example">.pp_pred hddt 85</i> <span class="dark">// Will show pp for map with hddt & 85, 95, 100 acc & max combo</span> <br/>
+                        Actually, you can use both types of parameters!<span class="dark">// Kword params should be after non-kword one</span> <br/>
+                        <i class="example">.pp_pred hddt combo=1337</i> <span class="dark">// Will show pp for map with hddt & 95, 100 acc & 1337 combo</span> <br/>
+                    </p>
+                </div>
+                <div class="info">
+                    <p>Displays pp for map in /np with predicted pps based on your scores</p>
+                </div>
+            </div>
+            <hr/>
+            <div class="command">
+                <div class="syntax">
+                    <h1>.info</h1>
+                    <h3>Syntax</h3>
+                    <p>.info</p>
+                    <h3>Usage</h3>
+                    <p>
+                        <i class="example">.info  </i> <span class="dark">// Will show message with main page's url</span> <br/>
+                    </p>
+                </div>
+                <div class="info">
+                    <p>Shows main page's url</p>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    </div>
+</body>
+</html>
