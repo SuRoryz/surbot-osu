@@ -272,7 +272,7 @@ def calcPred(*args) -> str:
 
 # INFO
 def info(*args):
-    mess = 'You can check commands info [https://pastebin.com/ZEBPuxix here]. You can find source & contact[https://suroryz.github.io/surbot_osu/ here]'
+    mess = 'You can find source & contact & info [https://suroryz.github.io/surbot_osu/ here]'
 
     return mess
 
