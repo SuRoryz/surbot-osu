@@ -68,10 +68,11 @@
     .urls {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: center;
     }
 
     a {
+        padding-right: 8%;
         text-decoration: none;
         color: white;
     }
@@ -166,10 +167,11 @@
     .urls {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: cener;
     }
 
     a {
+        padding-right: 8%;
         text-decoration: none;
         color: white;
     }
