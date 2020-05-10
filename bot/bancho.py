@@ -7,7 +7,7 @@ import Handler
 import configparser
 import lang_init
 
-ERR_DECODE = "Somebody used"
+ERR_DECODE = "Somebody used wrong chars"
 
 # CONFIG ------------------
 
