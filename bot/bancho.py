@@ -1,8 +1,13 @@
+'''Refactoring soon'''
+
 import socket
 import re
 import asyncio
 import Handler
 import configparser
+import lang_init
+
+ERR_DECODE = "Somebody used"
 
 # CONFIG ------------------
 
@@ -12,12 +17,12 @@ cfg.read('config.ini')
 # -------------------------
 
 
-#Some patterns to find
-ReUsername:"re.Pattern" = re.compile(r'^:(.+?)!')
-ReRoomName:"re.Pattern" = re.compile(r'PRIVMSG (.+?) :')
-ReContent:"re.Pattern" = re.compile(r'^:.+? :(.+)')
+# Some patterns to find
+ReUsername: "re.Pattern" = re.compile(r'^:(.+?)!')
+ReRoomName: "re.Pattern" = re.compile(r'PRIVMSG (.+?) :')
+ReContent: "re.Pattern" = re.compile(r'^:.+? :(.+)')
 
-#Data to login
+# Data to login
 
 '''++====-----------==--------=-------+--- ------------   ------- -- ---   -
 | Main bot class. Make sure you set PASS & NICK in config file.
@@ -30,12 +35,14 @@ ReContent:"re.Pattern" = re.compile(r'^:.+? :(.+)')
 |
 | connect(channel: str)                       #  Adds channel to cls.Channels.
 |
-| run()                                       #  Starts main loop. If cls.Channels not empty, connects to channels in it.
+| run()                                       #  Starts main loop. If cls.Channels not empty, connects to channels in it
 \==---=-------------+------------- -------  ----   -   -'''
+
+
 class Sur:
     def __init__(self):
 
-        self.running: bool = 0
+        self.running: bool = False
 
         self.request_limit: int = int(cfg.get('BANCHO', 'REQUEST_LIMIT'))
         self.stored_traffic: list = list()
@@ -55,7 +62,6 @@ class Sur:
         self.Ans: str = ''
 
     def login(self) -> None:
-
         self.irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.irc.connect((self.NETWORK, self.PORT))
         self.irc.send(bytearray('PASS {}\r\n'.format(self.PASS), encoding='utf-8'))
@@ -63,18 +69,15 @@ class Sur:
         self.irc.send(bytearray('USER {} {} {}\r\n'.format(self.NICK, self.NICK, self.NICK), encoding='utf-8'))
 
     def connect(self, channel: str) -> None:
-
         self.Channels.append(channel)
 
     # Starts main loop
     def run(self) -> None:
-
         loop: asyncio.new_event_loop = asyncio.new_event_loop()
         loop.run_until_complete(self.start())
 
     # Main loop
     async def start(self) -> None:
-
         self.running = 1
 
         print('Starting...')
@@ -89,22 +92,21 @@ class Sur:
             self.traffic = 0
             self.query_running = True
 
-            #lets listen...
+            # lets listen...
             asyncio.ensure_future(trafficQuery(self))
             await self.eventListener()
 
     # Listener
     async def eventListener(self) -> None:
-
         while self.running:
             self.Ans = self.getAnswer().split(str('\n'))
 
             for line in self.Ans:
-
                 # just ignore quit messages
                 if 'cho@ppy.sh QUIT' in line:
                     continue
 
+                # On action
                 elif 'ACTION' in line:
                     try:
                         self.content = re.findall(ReContent, line)[0]
@@ -112,17 +114,20 @@ class Sur:
                         self.channel = re.findall(ReRoomName, line)[0]
 
                         await self.action(self.user, self.content)
-
                     except Exception as e:
                         print('Error in ACTION', str(e))
                         continue
 
+                # On private message
                 elif 'PRIVMSG' in line:
-
                     try:
                         self.content = re.findall(ReContent, line)[0]
                         self.user = re.findall(ReUsername, line)[0]
                         self.channel = re.findall(ReRoomName, line)[0]
+
+                        # set language to a new user
+                        lang = lang_init.Initialization()
+                        lang.new(self.user)
                     except Exception as e:
                         print('Error in PRIVMSG', str(e))
                         continue
@@ -133,15 +138,11 @@ class Sur:
 
                 await asyncio.sleep(0)
 
-
     async def private(self, nick: str, message: str, channel: str) -> None:
-
         asyncio.ensure_future(self.onPrivate(nick, message, channel))
 
     # Calls on PRIVMSG
     async def onPrivate(self, user: str, msg: str, channel: str):
-
-
         if channel == self.NICK:
             channel = user
 
@@ -151,17 +152,14 @@ class Sur:
             asyncio.ensure_future(self.send_content('PRIVMSG {} {}\r\n'.format(channel, msg)))
 
     async def action(self, user: str, msg: str) -> None:
-
         asyncio.ensure_future(self.onAction(user, msg))
 
     # Calls on action
     async def onAction(self, user: str, msg: str) -> None:
-
         self.ActDict[user] = msg
 
     # Sends to Bancho
     async def send_content(self, req: str) -> None:
-
         if self.traffic <= self.request_limit:
             self.irc.send(bytearray(req, encoding='utf-8'))
             asyncio.ensure_future(addTraffic(self))
@@ -171,26 +169,27 @@ class Sur:
 
     # Reads from socket.
     def getAnswer(self, debug=False) -> str:
+        try:
+            if debug:
+                data = self.irc.recv(4096)
+                print(data.decode('utf-8'))
+                return
 
-        if debug:
             data = self.irc.recv(4096)
-            print(data.decode('utf-8'))
+            return data.decode('utf-8')
+        except:
+            print(ERR_DECODE)
             return
-
-        data = self.irc.recv(4096)
-        return data.decode('utf-8')
 
 
 # Adds traffic for 30 seconds.
 async def addTraffic(cls: Sur) -> None:
-
     cls.traffic += 1
     await asyncio.sleep(30)
     cls.traffic -= 1
 
 # If traffic more than limit, adds request to storage.
 async def trafficQuery(cls: Sur) -> None:
-
     while cls.running and cls.query_running:
         if cls.traffic <= (cls.request_limit-1) and len(cls.stored_traffic) > 0:
             req = cls.stored_traffic.pop(0)

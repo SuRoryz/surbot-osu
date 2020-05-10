@@ -2,10 +2,9 @@ import PP_Calculator
 from pppredict.predict import predict
 
 from util import str_to_dict, mod_convert
-from json import loads
 from re import findall
-
-ERR_NP_NEED: str = 'You need to use /np before this command'
+from lang_init import Initialization
+from get_local import get_sample
 
 ''' +====-----------==--------=----------- ------------   ------- -- ---   -
 |
@@ -26,14 +25,14 @@ ERR_NP_NEED: str = 'You need to use /np before this command'
 
 
 def calc(*args) -> str:
+    nick: str = args[-1]
+
     try:
         Action: str = args[1][0][args[2]]
-
     except:
-        return ERR_NP_NEED
+        return get_sample("ERROR_NP_NEED", nick)
 
     PPs: str = ''
-    nick: str = args[-1]
     args: list = args[0]
     beatmap_ID: str = findall(r'\d+', Action[Action.find('/b/')+3:])[0]
 
@@ -126,30 +125,31 @@ def calc(*args) -> str:
                                                arg_list['miss'])
 
     for i in range(len(res[1])):
-        PPs += '| {}pp for {}% '.format(res[1][i], arg_list['acc'][i]*100)
+        PPs += get_sample("PP_FOR", nick).format(res[1][i], arg_list['acc'][i]*100)
 
-    message = "For [https://osu.ppy.sh/b/{} {} [{}]{}] (OD {}, AR {}, CS {}, {}*, {}:{}) you'll get {} {}".format(
-                                                                beatmap_ID, #Beatmap ID
-                                                                res[2][0], #Title
-                                                                res[2][1], #Diff_name
-                                                                ' +{}'.format(''.join(arg_list['mods']).upper()) if arg_list['mods'] != 'nomod' else '', # If mods used
-                                                                *[round(i, 2) for i in res[0]], #AR and etc
-                                                                *[int(i) for i in divmod(int(res[2][2]), 60)], #True Seconds
-                                                                PPs, #PPs
-                                                                '({}x)'.format(arg_list['combo']) if arg_list['combo'] != 'max' else '') #If combo param used
+    message = get_sample("PP", nick).format(
+                                            beatmap_ID,   # Beatmap ID
+                                            res[2][0],  # Title
+                                            res[2][1],  # Diff_name
+                                            ' +{}'.format(''.join(arg_list['mods']).upper()) if arg_list['mods'] != 'nomod' else '',  # If mods used
+                                            *[round(i, 2) for i in res[0]],  # AR and etc
+                                            *[int(i) for i in divmod(int(res[2][2]), 60)],  # True Seconds
+                                            PPs,  # PPs
+                                            '({}x)'.format(arg_list['combo']) if arg_list['combo'] != 'max' else '')  # If combo param used
 
     return message
 
-#Actually a copy of calc function but with prediction.
+
+# Actually a copy of calc function but with prediction.
 def calcPred(*args) -> str:
+    nick: str = args[-1]
+
     try:
         Action: str = args[1][0][args[2]]
-
     except:
-        return ERR_NP_NEED
+        return get_sample("ERROR_NP_NEED", nick)
 
     PPs: str = ''
-    nick: str = args[-1]
     args: list = args[0]
     beatmap_ID: str = findall(r'\d+', Action[Action.find('/b/')+3:])[0]
 
@@ -179,7 +179,7 @@ def calcPred(*args) -> str:
             for i in kwargs:
                 if 'mods=' in i:
                     ind =  kwargs.index(i)
-                    kwargs[ind] =  kwargs[ind][:5] + '"' + kwargs[ind][5:] + '"'
+                    kwargs[ind] = kwargs[ind][:5] + '"' + kwargs[ind][5:] + '"'
 
             # bruh
             kwargs = eval('str_to_dict({})'.format(', '.join(kwargs)))
@@ -248,35 +248,60 @@ def calcPred(*args) -> str:
     Pred.predict(nick, float(res[0][3]))
 
     if Pred.predicted == 'Impossible':
-        PP_Pred = 'Impossible to FC for you :('
+        PP_Pred = get_sample("PP_PRED_IMPOSSIBLE", nick)
     else:
-        PP_Pred: float = "Future you {}pp".format(PP_Calculator.PP_Calculator('max',
-                                              beatmap_ID,
-                                              arg_list['mods'],
-                                              1,
-                                              (Pred.predicted * 0.01, ),
-                                              (0, ))[1][0])
+        PP_Pred: str = get_sample("PP_PRED_FUTURE", nick).format(PP_Calculator.PP_Calculator('max',
+                                                                                            beatmap_ID,
+                                                                                            arg_list['mods'],
+                                                                                            1,
+                                                                                            (Pred.predicted * 0.01, ),
+                                                                                            (0, ))[1][0])
 
-
-    message = "For [https://osu.ppy.sh/b/{} {} [{}]{}] (OD {}, AR {}, CS {}, {}*, {}:{}) you'll get {} {} # {}".format(
-                                                                beatmap_ID, #Beatmap ID
-                                                                res[2][0], #Title
-                                                                res[2][1], #Diff_name
-                                                                ' +{}'.format(''.join(arg_list['mods']).upper()) if arg_list['mods'] != 'nomod' else '', # If mods used
-                                                                *[round(i, 2) for i in res[0]], #AR and etc
-                                                                *[int(i) for i in divmod(int(res[2][2]), 60)], #True Seconds
-                                                                PPs, #PPs
-                                                                '({}x)'.format(arg_list['combo']) if arg_list['combo'] != 'max' else '', #If combo param used
-                                                                PP_Pred) # Predicted pp
+    message = get_sample("PP_PRED", nick).format(
+                                                beatmap_ID,  # Beatmap ID
+                                                res[2][0],  # Title
+                                                res[2][1],  # Diff_name
+                                                ' +{}'.format(''.join(arg_list['mods']).upper()) if arg_list['mods'] != 'nomod' else '', # If mods used
+                                                *[round(i, 2) for i in res[0]], # AR and etc
+                                                *[int(i) for i in divmod(int(res[2][2]), 60)],  # True Seconds
+                                                PPs,  # PPs
+                                                '({}x)'.format(arg_list['combo']) if arg_list['combo'] != 'max' else '',  # If combo param used
+                                                PP_Pred)  # Predicted pp
     return message
 
+
 # INFO
-def info(*args):
-    mess = 'You can find source & contact & info [https://suroryz.github.io/surbot-osu/ here]'
+def info(*args) -> str:
+    nick = args[-1]
+    mess = get_sample("INFO", nick)
 
     return mess
+
+
+# Set language
+def setLang(*args) -> str:
+    # Converts language to full name
+    lang_dict = {
+        'ru': 'Russian',
+        'en': 'English'
+    }
+
+    nick: str = args[-1]
+    language: str = args[0][0]
+
+    if language in lang_dict:
+        language = lang_dict[language]
+    else:
+        return get_sample("ERROR_NO_LANGUAGE", nick)
+
+    init = Initialization()
+    init.set(nick, language)
+
+    return get_sample("LANG_CHANGED", nick)
+
 
 # List of commands and functions
 cmd_list = {'pp': (calc, True),
             'pp_pred': (calcPred, True),
-            'info': (info, False)}
+            'info': (info, False),
+            'lang': (setLang, False)}
