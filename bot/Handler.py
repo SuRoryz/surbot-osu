@@ -1,20 +1,17 @@
 from commands import cmd_list
+from get_local import get_sample
 
 
 PREFIX = '.'
-ERR_SYNTAX = 'You enter something incorrect. Check help page -> .info'
 
 
 # Handler class. Use cls.handle to process message
 class Handler:
-    
     def __init__(self):
-
         self.command: str = None
         self.answer: str = None
 
     def handle(self, user, msg, *args):
-
         if  'sotarks' in msg:       #Some
             return 'bruh'           #F
         elif 'bruh' in msg:         #U
@@ -33,12 +30,9 @@ class Handler:
                         try:
                             res = cmd_list[command][0](msg, args, user)
                         except Exception as e:
-                            res = ERR_SYNTAX
+                            res = get_sample("ERROR_SYNTAX", user)
                             print('Error in handle.ActionIsTrue', e)
-
                     else:
                         res = cmd_list[command][0](msg, user)
                         
                     return res
-    
-            
