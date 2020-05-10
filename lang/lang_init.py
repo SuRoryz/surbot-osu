@@ -34,8 +34,8 @@ class Initialization:
         country: str = data['country']
         local: str = DEFAULT
 
-        for language in COUNTRIES_LANGS:
-            if country in COUNTRIES_LANGS[language]:
+        for language in self.COUNTRIES_LANGS:
+            if country in self.COUNTRIES_LANGS[language]:
                 local = language
 
         lang.insert_language(local)
