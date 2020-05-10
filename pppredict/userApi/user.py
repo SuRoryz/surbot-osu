@@ -24,7 +24,7 @@ class User:
         self.name: str = ''
         self.data: dict = dict()
         self.acc: float = 100.0
-        #Will be used soon
+        # Will be used soon
         self.pp: float = 0.0
 
         self.scores: dict = dict()
@@ -32,22 +32,36 @@ class User:
         self.star_avg: float = 0.0
 
     def start(self, name: str) -> None:
-        #Get info about player
+        # Get info about player
         self.setUser(name)
-        #Calculate avg stars from user's top 10 scores
+        # Calculate avg stars from user's top 10 scores
         self.calcAvgStar()
 
-    def setUser(self, name: str) -> None:
-        self.name = name
-        PARAMS_DATA: dict = {'k': self.KEY, 'u': self.name}
-        PARAMS_SCORES: dict = {'k': self.KEY, 'u': self.name, 'limit': 10}
+    # Gets user's data from osu-api
+    def getData(self):
+        return loads(requests.get(self.API_STAT, self.PARAMS_DATA).text)[0]
 
-        self.scores = loads(requests.get(self.API_SCORES, PARAMS_SCORES).text)
-        self.data = loads(requests.get(self.API_STAT, PARAMS_DATA).text)[0]
+    # Gets user's scores from osu-api
+    def getScores(self):
+        return loads(requests.get(self.API_SCORES, self.PARAMS_SCORES).text)
+
+    # Sets params for request to osu-api
+    def setParams(self, name):
+        self.name = name
+
+        self.PARAMS_DATA: dict = {'k': self.KEY, 'u': self.name}
+        self.PARAMS_SCORES: dict = {'k': self.KEY, 'u': self.name, 'limit': 10}
+
+    # Sets user's data
+    def setUser(self, name: str) -> None:
+        self.setParams(name)
+        self.scores = self.getScores()
+        self.data = self.getData()
 
         self.acc = float(self.data['accuracy'])
         self.pp = float(self.data['pp_raw'])
 
+    # Calculates average star rating from top 10 scores
     def calcAvgStar(self) -> None:
         bm_stars: list = list()
         for score in self.scores:
