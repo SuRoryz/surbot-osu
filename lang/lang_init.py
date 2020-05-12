@@ -1,4 +1,4 @@
-from sql import Language
+from language import Language
 from pppredict.userApi import user
 
 COUNTRYS_LANGS = {'English': ['US'],
@@ -10,14 +10,15 @@ DEFAULT = 'English'     # Default language
 # Init class. Language for a user sets by this class
 class Initialization:
     def __init__(self):
-
-        '''NEED HELP TO COMPLETE THIS DICT!
+        '''
+            NEED HELP TO COMPLETE THIS DICT!
 
             If you want to add some countries use this format:
-            Language: [ISO_3166-1_alpha-2 coutries codes
+            Language: [ISO_3166-1_alpha-2 coutries codes]
         '''
         self.COUNTRIES_LANGS: dict = {'English': ['US', 'CA', 'UK'],
-                                        'Russian': ['RU', 'UA', 'BY', 'KZ']}
+                                        'Russian': ['RU', 'UA', 'BY', 'KZ'],
+                                        'Deutsch': ['DE', 'CH']}
 
         self.DEFAULT = 'English'
 
@@ -34,8 +35,8 @@ class Initialization:
         country: str = data['country']
         local: str = DEFAULT
 
-        for language in COUNTRIES_LANGS:
-            if country in COUNTRIES_LANGS[language]:
+        for language in self.COUNTRIES_LANGS:
+            if country in self.COUNTRIES_LANGS[language]:
                 local = language
 
         lang.insert_language(local)

@@ -1,7 +1,6 @@
 import requests
 
 from json import loads
-from Mods import mods_dict
 from PP import PPCalc
 from Mods_mask import applyMods
 from util import getBeatmap
