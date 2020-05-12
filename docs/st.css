@@ -49,14 +49,18 @@
     }
 
     .info {
-        width: 20%;
+        color: #d7a178;
+        margin-top: 20px;
+    }
+
+    .syntax {
+        width: 95%;
     }
 
     .command {
         margin-bottom: 20px;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
     }
 

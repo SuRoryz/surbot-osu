@@ -6,6 +6,8 @@ import asyncio
 import Handler
 import configparser
 import lang_init
+from users import Users as us
+from maps import Maps as mp
 
 ERR_DECODE = "Somebody used wrong chars"
 
@@ -120,14 +122,18 @@ class Sur:
 
                 # On private message
                 elif 'PRIVMSG' in line:
-                    try:
-                        self.content = re.findall(ReContent, line)[0]
-                        self.user = re.findall(ReUsername, line)[0]
-                        self.channel = re.findall(ReRoomName, line)[0]
+                    self.content = re.findall(ReContent, line)[0]
+                    self.user = re.findall(ReUsername, line)[0]
+                    self.channel = re.findall(ReRoomName, line)[0]
 
-                        # set language to a new user
-                        lang = lang_init.Initialization()
-                        lang.new(self.user)
+                    try:
+                        if self.user != 'BanchoBot':
+                            # set language to a new user
+                            lang = lang_init.Initialization()
+                            lang.new(self.user)
+
+                            # Update user's stats if there are 24h since last update
+                            us.dailyUpdate(self.user)
                     except Exception as e:
                         print('Error in PRIVMSG', str(e))
                         continue
@@ -148,7 +154,7 @@ class Sur:
 
         msg = self.Handler.handle(user, msg, self.ActDict)
 
-        if msg is not None:
+        if msg:
             asyncio.ensure_future(self.send_content('PRIVMSG {} {}\r\n'.format(channel, msg)))
 
     async def action(self, user: str, msg: str) -> None:
@@ -156,14 +162,33 @@ class Sur:
 
     # Calls on action
     async def onAction(self, user: str, msg: str) -> None:
+        # Add action in action dict
         self.ActDict[user] = msg
+
+        # Add to base last used /np
+        beatmap = re.findall(r'\d+', msg[msg.find('/b/') + 3:])[0]
+        mp.addLastNP(beatmap)
 
     # Sends to Bancho
     async def send_content(self, req: str) -> None:
         if self.traffic <= self.request_limit:
-            self.irc.send(bytearray(req, encoding='utf-8'))
-            asyncio.ensure_future(addTraffic(self))
+            # Multiline support
+            if '<ENTER>' in req:
+                splitted_req = req.split('<ENTER>')
+                channel = splitted_req[0].split()[1]
 
+                for message in splitted_req:
+                    if message == '':
+                        continue
+                    if 'PRIVMSG' in message:
+                        self.irc.send(bytearray(message, encoding='utf-8'))
+                        continue
+                    message = f'\r\nPRIVMSG {channel} {message}'
+                    self.irc.send(bytearray(message, encoding='utf-8'))
+            else:
+                self.irc.send(bytearray(req, encoding='utf-8'))
+
+            asyncio.ensure_future(addTraffic(self))
         else:
             self.stored_traffic.append(req)
 

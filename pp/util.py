@@ -1,18 +1,20 @@
 import requests
 from Mods import mods_dict
 
+
 def black_magic(nobjs, acc, misses):
     n100 = round(-3.0 * ((acc - 1.0) * nobjs + misses) * 0.5)
 
     return n100
 
+
 def str_to_dict(**kwargs) -> dict:
     return kwargs
 
+
 def getBeatmap(key, id_, mods='nomod'):
     url = 'https://osu.ppy.sh/api/get_beatmaps'
-    params = {'k': key,
-	      'b': id_}
+    params = {'k': key, 'b': id_}
 
     if mods != 'nomod' and type(mods) != int:
         appble_mods = []
@@ -32,6 +34,13 @@ def getBeatmap(key, id_, mods='nomod'):
     c = requests.get(url, params).text   
 
     return c
+
+
+def add_spaces(message):
+    message += ' <ENTER> '
+
+    return message
+
 
 def bit_analys(x):
     binary = bin(x)

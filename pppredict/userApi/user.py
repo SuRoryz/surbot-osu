@@ -62,8 +62,10 @@ class User:
         self.pp = float(self.data['pp_raw'])
 
     # Calculates average star rating from top 10 scores
-    def calcAvgStar(self) -> None:
+    def calcAvgStar(self) -> float:
         bm_stars: list = list()
         for score in self.scores:
             bm_stars.append(float(loads(getBeatmap(self.KEY, score['beatmap_id'], int(score['enabled_mods'])))[0]['difficultyrating']))
             self.star_avg = sum(bm_stars)/10
+
+        return self.star_avg
