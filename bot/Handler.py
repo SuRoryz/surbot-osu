@@ -24,15 +24,18 @@ class Handler:
             for command in cmd_list:
                 if msg[0] == command:
                     msg.pop(0)
-
                     # Command list values looks like (command: func, need_action: bool)
                     if cmd_list[command][1] is True:
                         try:
                             res = cmd_list[command][0](msg, args, user)
                         except Exception as e:
-                            res = get_sample("ERROR_SYNTAX", user)
-                            print('Error in handle.ActionIsTrue', e)
+                            print('Error in Handler.ActionIsTrue', str(e))
+                            return get_sample("ERROR_SYNTAX", user)
                     else:
-                        res = cmd_list[command][0](msg, user)
+                        try:
+                            res = cmd_list[command][0](msg, user)
+                        except Exception as e:
+                            print('Error in Handler.ActionIsFalse', str(e))
+                            return get_sample("ERROR_SYNTAX", user)
                         
                     return res
